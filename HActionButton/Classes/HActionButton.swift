@@ -10,7 +10,7 @@ import UIKit
 
 @objc
 public protocol HActionButtonDataSource {
-    func numberOfItems(actionButton: HActionButton) -> Int
+    func numberOfItemButtons(actionButton: HActionButton) -> Int
     optional func actionButton(actionButton: HActionButton, relativeCenterPositionOfItemAtIndex index: Int) -> CGPoint
     optional func actionButton(actionButton: HActionButton, itemButtonAtIndex index: Int) -> UIButton
 }
@@ -76,6 +76,7 @@ public class HActionButton: UIView {
     
     func setupMainButton(){
         mainButton = UIButton()
+        mainButton.backgroundColor = UIColor(red: CGFloat(drand48()), green: CGFloat(drand48()), blue: CGFloat(drand48()), alpha: 1)
         mainButton.translatesAutoresizingMaskIntoConstraints = false
         mainButton.addTarget(self, action: #selector(HActionButton.mainButtonClicked(_:)), forControlEvents: .TouchUpInside)
         addSubview(mainButton)
@@ -99,13 +100,18 @@ public class HActionButton: UIView {
     }
     
     override public func hitTest(point: CGPoint, withEvent event: UIEvent?) -> UIView? {
-        for itemButton in itemButtons{
-            if CGRectContainsPoint(itemButton.frame, point) {
-                let translatedPoint = itemButton.convertPoint(point, fromView: self)
-                return itemButton.hitTest(translatedPoint, withEvent: event)
-            }
-        }
+        
         if active {
+            if CGRectContainsPoint(mainButton.frame, point) {
+                let translatedPoint = mainButton.convertPoint(point, fromView: self)
+                return mainButton.hitTest(translatedPoint, withEvent: event)
+            }
+            for itemButton in itemButtons{
+                if CGRectContainsPoint(itemButton.frame, point) {
+                    let translatedPoint = itemButton.convertPoint(point, fromView: self)
+                    return itemButton.hitTest(translatedPoint, withEvent: event)
+                }
+            }
             if CGRectContainsPoint(backgroundView.frame, point) {
                 let translatedPoint = backgroundView.convertPoint(point, fromView: self)
                 return backgroundView.hitTest(translatedPoint, withEvent: event)
@@ -122,6 +128,7 @@ public class HActionButton: UIView {
     
     func itemButtonClicked(sender: AnyObject){
         guard let button = sender as? UIButton, let index = itemButtons.indexOf(button) else{
+            print("[HActionButton] Item Button not found.")
             return
         }
         delegate?.actionButton(self, didClickItemButtonAtIndex: index)
@@ -145,7 +152,7 @@ public class HActionButton: UIView {
         }
         removeItems()
         
-        for index in 0 ..< source.numberOfItems(self) {
+        for index in 0 ..< source.numberOfItemButtons(self) {
             let button = source.actionButton?(self, itemButtonAtIndex: index) ?? HActionButton.CircleItemButton(self)
             button.center = convertPoint(center, fromView: superview)
             button.addTarget(self, action: #selector(HActionButton.itemButtonClicked(_:)), forControlEvents: .TouchUpInside)
@@ -162,6 +169,7 @@ public class HActionButton: UIView {
     
     func prepareBackgroundViewFrame(){
         guard let size = UIApplication.sharedApplication().keyWindow?.frame.size,  let superView = self.superview else{
+            print("[HActionButton] Application window view not found.")
             return
         }
         
@@ -202,10 +210,6 @@ public class HActionButton: UIView {
     }
     
     func hideItems(){
-        
-        guard let source = dataSource else{
-            return
-        }
         UIView.animateWithDuration(
             animationDelegate?.actionButton?(self, animationTimeForStatus: false) ?? 0.3,
             delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.6, options: .LayoutSubviews, animations: {
