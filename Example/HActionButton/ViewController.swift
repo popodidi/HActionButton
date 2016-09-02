@@ -17,6 +17,7 @@ class ViewController: UIViewController, HActionButtonDataSource, HActionButtonDe
         actionButton.dataSource = self
         actionButton.delegate = self
         actionButton.animationDelegate = self
+        actionButton.backgroundView.backgroundColor = UIColor(red: CGFloat(drand48()), green: CGFloat(drand48()), blue: CGFloat(drand48()), alpha: 0.4)
         actionButton.mainButton.setImage(UIImage(named:"red_dot"), forState: .Normal)
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -40,14 +41,19 @@ class ViewController: UIViewController, HActionButtonDataSource, HActionButtonDe
     
     // MARK: - HActionButtonDelegate
     func actionButton(actionButton: HActionButton, didClickItemButtonAtIndex index: Int) {
+        actionButton.toggle()
         print("button \(index) clicked")
+    }
+    func actionButton(actionButton: HActionButton, didBecome active: Bool) {
+        
     }
 
     // MARK: - HActionButtonAnimationDelegate
     // Optional
     func actionButton(actionButton: HActionButton, animationTimeForStatus active: Bool) -> NSTimeInterval {
-        //
-        return active ? 1.5 : 0.5
+        // return 0.3 by default
+        return 0.3
+        // return active ? 2 : 0.1
     }
     // Optional
     func actionButton(actionButton: HActionButton, confugureMainButton mainButton: UIButton, forStatus active: Bool) {
@@ -57,7 +63,14 @@ class ViewController: UIViewController, HActionButtonDataSource, HActionButtonDe
     }
     // Optional
     func actionButton(actionButton: HActionButton, confugureItemButton itemButton: UIButton, atIndex index: Int, forStatus active: Bool) {
-        // Do whatever you want
+        // set alpha of itemButton by default
+        itemButton.alpha = CGFloat(active)
+    }
+    // Optional
+    func actionButton(actionButton: HActionButton, confugureBackgroundView backgroundView: UIView, forStatus active: Bool) {
+        // set alpha of backgroundView by default
+        backgroundView.backgroundColor = UIColor(red: CGFloat(drand48()), green: CGFloat(drand48()), blue: CGFloat(drand48()), alpha: 0.4)
+        backgroundView.alpha = CGFloat(active)
     }
 }
 
