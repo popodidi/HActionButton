@@ -17,36 +17,42 @@ class ViewController: UIViewController, HActionButtonDataSource, HActionButtonDe
         actionButton.dataSource = self
         actionButton.delegate = self
         actionButton.animationDelegate = self
-        actionButton.backgroundView.backgroundColor = UIColor(red: CGFloat(drand48()), green: CGFloat(drand48()), blue: CGFloat(drand48()), alpha: 0.4)
+        actionButton.mainButton.backgroundColor = nil
         actionButton.mainButton.setImage(UIImage(named:"red_dot"), forState: .Normal)
-        // Do any additional setup after loading the view, typically from a nib.
     }
 
     
     // MARK: - HActionButtonDataSource
-    func numberOfItems(actionButton: HActionButton) -> Int {
-        return 20
+    func numberOfItemButtons(actionButton: HActionButton) -> Int {
+        return 50
     }
     // Optional
     func actionButton(actionButton: HActionButton, itemButtonAtIndex index: Int) -> UIButton {
         // return circle button with random color by default
-        return HActionButton.CircleItemButton(actionButton)
+        let button = HActionButton.CircleItemButton(actionButton)
+        button.setTitle("\(index)", forState: .Normal)
+        return button
         
     }
     // Optional
     func actionButton(actionButton: HActionButton, relativeCenterPositionOfItemAtIndex index: Int) -> CGPoint{
         // return circle button with random color by default
-        return HActionButton.EquallySpacedArcPosition(actionButton, atIndex: index, from: 0, to: 2 * M_PI)
+        return HActionButton.EquallySpacedArcPosition(actionButton, atIndex: index, withRadius: CGFloat(index) * 5, from: 0, to: 4 * M_PI)
     }
+    
+    
     
     // MARK: - HActionButtonDelegate
     func actionButton(actionButton: HActionButton, didClickItemButtonAtIndex index: Int) {
         actionButton.toggle()
         print("button \(index) clicked")
     }
+    // Optional
     func actionButton(actionButton: HActionButton, didBecome active: Bool) {
         
     }
+    
+    
 
     // MARK: - HActionButtonAnimationDelegate
     // Optional
@@ -59,7 +65,6 @@ class ViewController: UIViewController, HActionButtonDataSource, HActionButtonDe
     func actionButton(actionButton: HActionButton, confugureMainButton mainButton: UIButton, forStatus active: Bool) {
         // rotate button with PI/2 back and forth for status by default
         HActionButton.RotateButton(mainButton, forStatus: active)
-        // HActionButton.RotateButton(mainButton, byAngle: M_PI/4, forStatus: active)
     }
     // Optional
     func actionButton(actionButton: HActionButton, confugureItemButton itemButton: UIButton, atIndex index: Int, forStatus active: Bool) {
@@ -72,5 +77,6 @@ class ViewController: UIViewController, HActionButtonDataSource, HActionButtonDe
         backgroundView.backgroundColor = UIColor(red: CGFloat(drand48()), green: CGFloat(drand48()), blue: CGFloat(drand48()), alpha: 0.4)
         backgroundView.alpha = CGFloat(active)
     }
+ 
 }
 

@@ -28,7 +28,7 @@ extension HActionButton{
                                                             from startAngle: Double,
                                                                  to endAngle: Double) -> CGPoint{
         
-        guard let numberOfItems = actionButton.dataSource?.numberOfItems(actionButton) else {
+        guard let numberOfItems = actionButton.dataSource?.numberOfItemButtons(actionButton) else {
             return CGPointZero
         }
         let totalAngle = endAngle - startAngle

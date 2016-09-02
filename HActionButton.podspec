@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'HActionButton'
-  s.version          = '0.1.0'
+  s.version          = '1.0.0'
   s.summary          = 'Action button with customizable items, position and animation.'
 
 # This description is used to generate tags and improve search results.
@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
 #   * Write the description between the DESC delimiters below.
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
-  s.description      = "Action button with customizable items, position and animation."
+s.description      = "An customizable action button subclassing UIView where the mainButton, itemButton, and animation can all be customized. Besides flexibility of customization, default settings and built-in functions also provide great usability of the pod."
 
   s.homepage         = 'https://github.com/popodidi/HActionButton'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
