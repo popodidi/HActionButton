@@ -1,0 +1,6 @@
+framework module HActionButton {
+  umbrella header "HActionButton-umbrella.h"
+
+  export *
+  module * { export * }
+}
