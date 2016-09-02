@@ -44,3 +44,25 @@ extension HActionButton{
         button.transform = CGAffineTransformMakeRotation(CGFloat(Double(active) * (angle ?? M_PI / 2)))
     }
 }
+
+//class DefaultAnimationDelegate: HActionButtonAnimationDelegate{
+//    // MARK: - HActionButtonAnimationDelegate
+//    // Optional
+//    func actionButton(actionButton: HActionButton, animationTimeForStatus active: Bool) -> NSTimeInterval {
+//        return 0.3
+//    }
+//    // Optional
+//    func actionButton(actionButton: HActionButton, confugureMainButton mainButton: UIButton, forStatus active: Bool) {
+//        // rotate button with PI/2 back and forth for status by default
+//        HActionButton.RotateButton(mainButton, forStatus: active)
+//
+//    }
+//    // Optional
+//    func actionButton(actionButton: HActionButton, confugureItemButton itemButton: UIButton, atIndex index: Int, forStatus active: Bool) {
+//        // Do whatever you want
+//    }
+//    // Optional
+//    func actionButton(actionButton: HActionButton, confugureBackgroundView backgroundView: UIView, forStatus active: Bool) {
+//        backgroundView.alpha = CGFloat(active)
+//    }
+//}
