@@ -1,0 +1,22 @@
+PODS:
+  - HActionButton (0.1.0)
+  - Nimble (3.2.0)
+  - Quick (0.9.3)
+
+DEPENDENCIES:
+  - HActionButton (from `../`)
+  - Nimble (~> 3.0)
+  - Quick (~> 0.8)
+
+EXTERNAL SOURCES:
+  HActionButton:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  HActionButton: d20901b587039f060e63de186e3b698454f0e71c
+  Nimble: 703854335d181df169bbca9c97117b5cf8c47c1d
+  Quick: 13a2a2b19a5d8e3ed4fd0c36ee46597fd77ebf71
+
+PODFILE CHECKSUM: 02ad6f1aba6e1c7622bd493773234a9a5463d20d
+
+COCOAPODS: 1.0.1
