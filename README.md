@@ -1,6 +1,6 @@
 # HActionButton
 
-[![CI Status](http://img.shields.io/travis/Chang, Hao/HActionButton.svg?style=flat)](https://travis-ci.org/Chang, Hao/HActionButton)
+[![CI Status](http://img.shields.io/travis/popodidi/HActionButton.svg?style=flat)](https://travis-ci.org/popodidi/HActionButton)
 [![Version](https://img.shields.io/cocoapods/v/HActionButton.svg?style=flat)](http://cocoapods.org/pods/HActionButton)
 [![License](https://img.shields.io/cocoapods/l/HActionButton.svg?style=flat)](http://cocoapods.org/pods/HActionButton)
 [![Platform](https://img.shields.io/cocoapods/p/HActionButton.svg?style=flat)](http://cocoapods.org/pods/HActionButton)
