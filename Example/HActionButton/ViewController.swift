@@ -24,7 +24,7 @@ class ViewController: UIViewController, HActionButtonDataSource, HActionButtonDe
     
     // MARK: - HActionButtonDataSource
     func numberOfItemButtons(actionButton: HActionButton) -> Int {
-        return 50
+        return 10
     }
     // Optional
     func actionButton(actionButton: HActionButton, itemButtonAtIndex index: Int) -> UIButton {
@@ -37,7 +37,7 @@ class ViewController: UIViewController, HActionButtonDataSource, HActionButtonDe
     // Optional
     func actionButton(actionButton: HActionButton, relativeCenterPositionOfItemAtIndex index: Int) -> CGPoint{
         // return circle button with random color by default
-        return HActionButton.EquallySpacedArcPosition(actionButton, atIndex: index, withRadius: CGFloat(index) * 5, from: 0, to: 4 * M_PI)
+        return HActionButton.EquallySpacedArcPosition(actionButton, atIndex: index, withRadius: (CGFloat(index) * 10 + CGFloat(arc4random_uniform(50))) + 40, from: 0, to: 4 * M_PI)
     }
     
     
