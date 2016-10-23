@@ -73,7 +73,6 @@ class ViewController: UIViewController, HActionButtonDataSource, HActionButtonDe
         itemButton.alpha = CGFloat(active)
     }
     // Optional
-    
     func actionButton(actionButton: HActionButton, confugureBackgroundView backgroundView: UIView, forStatus active: Bool) {
         // set alpha of backgroundView by default
         backgroundView.backgroundColor = UIColor(red: CGFloat(drand48()), green: CGFloat(drand48()), blue: CGFloat(drand48()), alpha: 0.4)
