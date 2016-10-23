@@ -35,8 +35,9 @@ class ViewController: UIViewController, HActionButtonDataSource, HActionButtonDe
         
     }
     // Optional
+    
     func actionButton(actionButton: HActionButton, relativeCenterPositionOfItemAtIndex index: Int) -> CGPoint{
-        // return circle button with random color by default
+        // return a equally spaced circle around the main button by default
         return HActionButton.EquallySpacedArcPosition(actionButton, atIndex: index, withRadius: (CGFloat(index) * 10 + CGFloat(arc4random_uniform(50))) + 40, from: 0, to: 4 * M_PI)
     }
     
@@ -72,6 +73,7 @@ class ViewController: UIViewController, HActionButtonDataSource, HActionButtonDe
         itemButton.alpha = CGFloat(active)
     }
     // Optional
+    
     func actionButton(actionButton: HActionButton, confugureBackgroundView backgroundView: UIView, forStatus active: Bool) {
         // set alpha of backgroundView by default
         backgroundView.backgroundColor = UIColor(red: CGFloat(drand48()), green: CGFloat(drand48()), blue: CGFloat(drand48()), alpha: 0.4)

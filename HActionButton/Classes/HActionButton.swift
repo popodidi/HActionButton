@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ HActionButtonDataSource is a protocol to implement for data source of the HActionButton.
+ */
 @objc
 public protocol HActionButtonDataSource {
     func numberOfItemButtons(actionButton: HActionButton) -> Int
@@ -15,6 +18,9 @@ public protocol HActionButtonDataSource {
     optional func actionButton(actionButton: HActionButton, itemButtonAtIndex index: Int) -> UIButton
 }
 
+/**
+ HActionButtonAnimationDelegate is a protocol to implement for customizing the HActionButton animation.
+ */
 @objc
 public protocol HActionButtonAnimationDelegate{
     optional func actionButton(actionButton: HActionButton, animationTimeForStatus active: Bool) -> NSTimeInterval
@@ -23,6 +29,9 @@ public protocol HActionButtonAnimationDelegate{
     optional func actionButton(actionButton: HActionButton, confugureBackgroundView backgroundView: UIView, forStatus active: Bool)
 }
 
+/**
+ HActionButtonDelegate is a protocol to implement for responding to user interactions to the HActionButton.
+ */
 @objc
 public protocol HActionButtonDelegate {
     func actionButton(actionButton: HActionButton, didClickItemButtonAtIndex index: Int)
@@ -32,8 +41,17 @@ public protocol HActionButtonDelegate {
 public class HActionButton: UIView {
     
     // MARK: - Data source, delegate
+    /**
+     HActionButtonDataSource
+     */
     public var dataSource: HActionButtonDataSource?
+    /**
+     HActionButtonDelegate
+     */
     public var delegate: HActionButtonDelegate?
+    /**
+     HActionButtonAnimationDelegate
+     */
     public var animationDelegate: HActionButtonAnimationDelegate?{
         didSet{
             setupBackgroundView()
@@ -41,15 +59,29 @@ public class HActionButton: UIView {
     }
     
     // MARK: - Status
+    /**
+     Return active statuc of HActionButton
+     */
+    public var isActive: Bool{
+        get{
+            return active
+        }
+    }
     var active: Bool = false
     
     // MARK: - UI elements
+    /**
+     The main action button
+     */
     public var mainButton : UIButton!
+    /**
+     Background view when HActionButton is active, which is with black color and alpha of 30% by default. The background view could be configured by either directly setting backgroundView or implement the HActionButtonAnimationDelegate.
+     */
     public var backgroundView: UIView = UIView()
     var itemButtons: [UIButton] = [UIButton]()
     
     // MARK: - init
-    override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         setup()
     }
@@ -57,6 +89,7 @@ public class HActionButton: UIView {
         super.init(coder: aDecoder)
         setup()
     }
+    
     
     // MARK: - setup
     func setup(){
@@ -135,6 +168,9 @@ public class HActionButton: UIView {
     }
     
     // MARK: - Status control
+    /**
+     Toggle statuc of HActionButton
+     */
     public func toggle(){
         if active {
             hideItems()
@@ -201,7 +237,7 @@ public class HActionButton: UIView {
                     if ((self.animationDelegate?.actionButton?(self, confugureItemButton: itemButton, atIndex: index, forStatus: true)) == nil) {
                         itemButton.alpha = 1
                     }
-                    itemButton.center = (source.actionButton?(self, relativeCenterPositionOfItemAtIndex: index) ?? HActionButton.EquallySpacedArcPosition(self, atIndex: index, from: 0, to: 2 * M_PI)).from(self.convertPoint(self.center, fromView: self.superview))
+                    itemButton.center = (source.actionButton?(self, relativeCenterPositionOfItemAtIndex: index) ?? HActionButton.EquallySpacedArcPosition(self, atIndex: index, from: 0, to: (2 * M_PI - 2 * M_PI / Double(self.itemButtons.count)))).from(self.convertPoint(self.center, fromView: self.superview))
                 }
                 self.layoutIfNeeded()
         }){ (completed) -> Void in
