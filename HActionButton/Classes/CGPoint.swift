@@ -9,7 +9,7 @@
 import Foundation
 
 extension CGPoint{
-    func from(point: CGPoint) -> CGPoint{
+    func from(_ point: CGPoint) -> CGPoint{
         return CGPoint(x: x + point.x, y: y + point.y)
     }
 }
