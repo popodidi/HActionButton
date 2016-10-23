@@ -29,7 +29,7 @@ Besides flexibility of customization, default settings and built-in functions al
 - [x] Animation delegate protocol
 	- `optional` Animation time
 	- `optional` Main button, item button and background view configuration for active/inactive status
-- [ ] Documentation
+- [x] Documentation
 
 ### Demo
 
@@ -49,6 +49,10 @@ it, simply add the following line to your Podfile:
 ```ruby
 pod "HActionButton"
 ```
+
+Swift version | version
+---- | ----
+2.3 | 2.0.x
 
 ## Get Started
 
@@ -108,6 +112,14 @@ class ViewController: UIViewController, HActionButtonDataSource, HActionButtonDe
 ```
 
 Now, your action button is supposed to work. Checkout the following parts to customize the action button.
+
+## Customize main button
+
+The main action button can be customized by configure `mainButton`, which is defined in `HActionButton` class.
+
+```swift
+public var mainButton: UIButton!
+```
 
 ## Protocols
 
