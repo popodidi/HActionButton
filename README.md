@@ -53,6 +53,7 @@ pod "HActionButton"
 Swift version | version
 ---- | ----
 2.3 | 2.0.x
+3.0 | 2.1.0 or later
 
 ## Get Started
 
@@ -118,7 +119,10 @@ Now, your action button is supposed to work. Checkout the following parts to cus
 The main action button can be customized by configure `mainButton`, which is defined in `HActionButton` class.
 
 ```swift
+// swift 2.3
 public var mainButton: UIButton!
+// swift 3.0
+open var mainButton: UIButton!
 ```
 
 ## Protocols

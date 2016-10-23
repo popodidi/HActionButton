@@ -13,9 +13,9 @@ import UIKit
  */
 @objc
 public protocol HActionButtonDataSource {
-    func numberOfItemButtons(actionButton: HActionButton) -> Int
-    optional func actionButton(actionButton: HActionButton, relativeCenterPositionOfItemAtIndex index: Int) -> CGPoint
-    optional func actionButton(actionButton: HActionButton, itemButtonAtIndex index: Int) -> UIButton
+    func numberOfItemButtons(_ actionButton: HActionButton) -> Int
+    @objc optional func actionButton(_ actionButton: HActionButton, relativeCenterPositionOfItemAtIndex index: Int) -> CGPoint
+    @objc optional func actionButton(_ actionButton: HActionButton, itemButtonAtIndex index: Int) -> UIButton
 }
 
 /**
@@ -23,10 +23,10 @@ public protocol HActionButtonDataSource {
  */
 @objc
 public protocol HActionButtonAnimationDelegate{
-    optional func actionButton(actionButton: HActionButton, animationTimeForStatus active: Bool) -> NSTimeInterval
-    optional func actionButton(actionButton: HActionButton, confugureMainButton mainButton: UIButton, forStatus active: Bool)
-    optional func actionButton(actionButton: HActionButton, confugureItemButton itemButton: UIButton, atIndex index: Int, forStatus active: Bool)
-    optional func actionButton(actionButton: HActionButton, confugureBackgroundView backgroundView: UIView, forStatus active: Bool)
+    @objc optional func actionButton(_ actionButton: HActionButton, animationTimeForStatus active: Bool) -> TimeInterval
+    @objc optional func actionButton(_ actionButton: HActionButton, confugureMainButton mainButton: UIButton, forStatus active: Bool)
+    @objc optional func actionButton(_ actionButton: HActionButton, confugureItemButton itemButton: UIButton, atIndex index: Int, forStatus active: Bool)
+    @objc optional func actionButton(_ actionButton: HActionButton, confugureBackgroundView backgroundView: UIView, forStatus active: Bool)
 }
 
 /**
@@ -34,25 +34,25 @@ public protocol HActionButtonAnimationDelegate{
  */
 @objc
 public protocol HActionButtonDelegate {
-    func actionButton(actionButton: HActionButton, didClickItemButtonAtIndex index: Int)
-    optional func actionButton(actionButton: HActionButton, didBecome active: Bool)
+    func actionButton(_ actionButton: HActionButton, didClickItemButtonAtIndex index: Int)
+    @objc optional func actionButton(_ actionButton: HActionButton, didBecome active: Bool)
 }
 
-public class HActionButton: UIView {
+open class HActionButton: UIView {
     
     // MARK: - Data source, delegate
     /**
      HActionButtonDataSource
      */
-    public var dataSource: HActionButtonDataSource?
+    open var dataSource: HActionButtonDataSource?
     /**
      HActionButtonDelegate
      */
-    public var delegate: HActionButtonDelegate?
+    open var delegate: HActionButtonDelegate?
     /**
      HActionButtonAnimationDelegate
      */
-    public var animationDelegate: HActionButtonAnimationDelegate?{
+    open var animationDelegate: HActionButtonAnimationDelegate?{
         didSet{
             setupBackgroundView()
         }
@@ -62,7 +62,7 @@ public class HActionButton: UIView {
     /**
      Return active statuc of HActionButton
      */
-    public var isActive: Bool{
+    open var isActive: Bool{
         get{
             return active
         }
@@ -73,11 +73,11 @@ public class HActionButton: UIView {
     /**
      The main action button
      */
-    public var mainButton : UIButton!
+    open var mainButton : UIButton!
     /**
      Background view when HActionButton is active, which is with black color and alpha of 30% by default. The background view could be configured by either directly setting backgroundView or implement the HActionButtonAnimationDelegate.
      */
-    public var backgroundView: UIView = UIView()
+    open var backgroundView: UIView = UIView()
     var itemButtons: [UIButton] = [UIButton]()
     
     // MARK: - init
@@ -100,67 +100,67 @@ public class HActionButton: UIView {
     // MARK: - setup each element
     func setupBackgroundView(){
         backgroundView.removeFromSuperview()
-        backgroundView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.3)
+        backgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         backgroundView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(HActionButton.toggle)))
-        backgroundView.hidden = true
+        backgroundView.isHidden = true
         animationDelegate?.actionButton?(self, confugureBackgroundView: backgroundView, forStatus: false)
-        insertSubview(backgroundView, atIndex: 0)
+        insertSubview(backgroundView, at: 0)
     }
     
     func setupMainButton(){
         mainButton = UIButton()
         mainButton.backgroundColor = UIColor(red: CGFloat(drand48()), green: CGFloat(drand48()), blue: CGFloat(drand48()), alpha: 1)
         mainButton.translatesAutoresizingMaskIntoConstraints = false
-        mainButton.addTarget(self, action: #selector(HActionButton.mainButtonClicked(_:)), forControlEvents: .TouchUpInside)
+        mainButton.addTarget(self, action: #selector(HActionButton.mainButtonClicked(_:)), for: .touchUpInside)
         addSubview(mainButton)
         
         // width constraint
-        addConstraint(NSLayoutConstraint(item: mainButton, attribute: .Width, relatedBy: .Equal, toItem: self, attribute: .Width, multiplier: 1, constant: 0))
+        addConstraint(NSLayoutConstraint(item: mainButton, attribute: .width, relatedBy: .equal, toItem: self, attribute: .width, multiplier: 1, constant: 0))
         // height constraint
-        addConstraint(NSLayoutConstraint(item: mainButton, attribute: .Height, relatedBy: .Equal, toItem: self, attribute: .Height, multiplier: 1, constant: 0))
+        addConstraint(NSLayoutConstraint(item: mainButton, attribute: .height, relatedBy: .equal, toItem: self, attribute: .height, multiplier: 1, constant: 0))
         // x constraint
-        addConstraint(NSLayoutConstraint(item: mainButton, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1, constant: 0))
+        addConstraint(NSLayoutConstraint(item: mainButton, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
         // y constraint
-        addConstraint(NSLayoutConstraint(item: mainButton, attribute: .CenterY, relatedBy: .Equal, toItem: self, attribute: .CenterY, multiplier: 1, constant: 0))
+        addConstraint(NSLayoutConstraint(item: mainButton, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0))
     }
     
     // MARK: - subclassing UIView
-    override public func layoutSubviews() {
+    override open func layoutSubviews() {
         super.layoutSubviews()
         // configure circle main button
         mainButton.layer.cornerRadius = min(mainButton.frame.height/2, mainButton.frame.width/2)
         
     }
     
-    override public func hitTest(point: CGPoint, withEvent event: UIEvent?) -> UIView? {
+    override open func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         
         if active {
-            if CGRectContainsPoint(mainButton.frame, point) {
-                let translatedPoint = mainButton.convertPoint(point, fromView: self)
-                return mainButton.hitTest(translatedPoint, withEvent: event)
+            if mainButton.frame.contains(point) {
+                let translatedPoint = mainButton.convert(point, from: self)
+                return mainButton.hitTest(translatedPoint, with: event)
             }
             for itemButton in itemButtons{
-                if CGRectContainsPoint(itemButton.frame, point) {
-                    let translatedPoint = itemButton.convertPoint(point, fromView: self)
-                    return itemButton.hitTest(translatedPoint, withEvent: event)
+                if itemButton.frame.contains(point) {
+                    let translatedPoint = itemButton.convert(point, from: self)
+                    return itemButton.hitTest(translatedPoint, with: event)
                 }
             }
-            if CGRectContainsPoint(backgroundView.frame, point) {
-                let translatedPoint = backgroundView.convertPoint(point, fromView: self)
-                return backgroundView.hitTest(translatedPoint, withEvent: event)
+            if backgroundView.frame.contains(point) {
+                let translatedPoint = backgroundView.convert(point, from: self)
+                return backgroundView.hitTest(translatedPoint, with: event)
             }
         }
-        return super.hitTest(point, withEvent: event)
+        return super.hitTest(point, with: event)
     }
     
     
     // MARK: - button clicked
-    func mainButtonClicked(sender: UIButton){
+    func mainButtonClicked(_ sender: UIButton){
         toggle()
     }
     
-    func itemButtonClicked(sender: AnyObject){
-        guard let button = sender as? UIButton, let index = itemButtons.indexOf(button) else{
+    func itemButtonClicked(_ sender: AnyObject){
+        guard let button = sender as? UIButton, let index = itemButtons.index(of: button) else{
             print("[HActionButton] Item Button not found.")
             return
         }
@@ -171,7 +171,7 @@ public class HActionButton: UIView {
     /**
      Toggle statuc of HActionButton
      */
-    public func toggle(){
+    open func toggle(){
         if active {
             hideItems()
         }else{
@@ -190,10 +190,10 @@ public class HActionButton: UIView {
         
         for index in 0 ..< source.numberOfItemButtons(self) {
             let button = source.actionButton?(self, itemButtonAtIndex: index) ?? HActionButton.CircleItemButton(self)
-            button.center = convertPoint(center, fromView: superview)
-            button.addTarget(self, action: #selector(HActionButton.itemButtonClicked(_:)), forControlEvents: .TouchUpInside)
+            button.center = convert(center, from: superview)
+            button.addTarget(self, action: #selector(HActionButton.itemButtonClicked(_:)), for: .touchUpInside)
             button.alpha = alpha
-            self.insertSubview(button, atIndex: index + 1) // above backgroundView
+            self.insertSubview(button, at: index + 1) // above backgroundView
             itemButtons.append(button)
         }
     }
@@ -204,7 +204,7 @@ public class HActionButton: UIView {
     }
     
     func prepareBackgroundViewFrame(){
-        guard let size = UIApplication.sharedApplication().keyWindow?.frame.size,  let superView = self.superview else{
+        guard let size = UIApplication.shared.keyWindow?.frame.size,  let superView = self.superview else{
             print("[HActionButton] Application window view not found.")
             return
         }
@@ -221,10 +221,10 @@ public class HActionButton: UIView {
         }
         setupItemsAtCenter()
         prepareBackgroundViewFrame()
-        backgroundView.hidden = false
-        UIView.animateWithDuration(
-            animationDelegate?.actionButton?(self, animationTimeForStatus: true) ?? 0.3,
-            delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.6, options: .LayoutSubviews, animations: {
+        backgroundView.isHidden = false
+        UIView.animate(
+            withDuration: animationDelegate?.actionButton?(self, animationTimeForStatus: true) ?? 0.3,
+            delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.6, options: .layoutSubviews, animations: {
                 
                 if ((self.animationDelegate?.actionButton?(self, confugureMainButton: self.mainButton, forStatus: true)) == nil){
                     HActionButton.RotateButton(self.mainButton, forStatus: true)
@@ -233,11 +233,11 @@ public class HActionButton: UIView {
                     self.backgroundView.alpha = CGFloat(true)
                 }
                 
-                for (index, itemButton) in self.itemButtons.enumerate(){
+                for (index, itemButton) in self.itemButtons.enumerated(){
                     if ((self.animationDelegate?.actionButton?(self, confugureItemButton: itemButton, atIndex: index, forStatus: true)) == nil) {
                         itemButton.alpha = 1
                     }
-                    itemButton.center = (source.actionButton?(self, relativeCenterPositionOfItemAtIndex: index) ?? HActionButton.EquallySpacedArcPosition(self, atIndex: index, from: 0, to: (2 * M_PI - 2 * M_PI / Double(self.itemButtons.count)))).from(self.convertPoint(self.center, fromView: self.superview))
+                    itemButton.center = (source.actionButton?(self, relativeCenterPositionOfItemAtIndex: index) ?? HActionButton.EquallySpacedArcPosition(self, atIndex: index, from: 0, to: (2 * M_PI - 2 * M_PI / Double(self.itemButtons.count)))).from(self.convert(self.center, from: self.superview))
                 }
                 self.layoutIfNeeded()
         }){ (completed) -> Void in
@@ -246,9 +246,9 @@ public class HActionButton: UIView {
     }
     
     func hideItems(){
-        UIView.animateWithDuration(
-            animationDelegate?.actionButton?(self, animationTimeForStatus: false) ?? 0.3,
-            delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.6, options: .LayoutSubviews, animations: {
+        UIView.animate(
+            withDuration: animationDelegate?.actionButton?(self, animationTimeForStatus: false) ?? 0.3,
+            delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.6, options: .layoutSubviews, animations: {
                 
                 if ((self.animationDelegate?.actionButton?(self, confugureMainButton: self.mainButton, forStatus: false)) == nil){
                     HActionButton.RotateButton(self.mainButton, forStatus: false)
@@ -257,16 +257,16 @@ public class HActionButton: UIView {
                     self.backgroundView.alpha = CGFloat(false)
                 }
                 
-                for (index, itemButton) in self.itemButtons.enumerate(){
+                for (index, itemButton) in self.itemButtons.enumerated(){
                     if ((self.animationDelegate?.actionButton?(self, confugureItemButton: itemButton, atIndex: index, forStatus: false)) == nil) {
                         itemButton.alpha = 0
                     }
-                    itemButton.center = self.convertPoint(self.center, fromView: self.superview)
+                    itemButton.center = self.convert(self.center, from: self.superview)
                 }
                 self.layoutIfNeeded()
         }){ (completed) -> Void in
             self.removeItems()
-            self.backgroundView.hidden = true
+            self.backgroundView.isHidden = true
             self.delegate?.actionButton?(self, didBecome: false)
         }
     }
