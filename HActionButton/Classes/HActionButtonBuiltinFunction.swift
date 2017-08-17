@@ -54,6 +54,6 @@ extension HActionButton{
     public class func RotateButton(_ button: UIButton,
                                    byAngle angle: Double = M_PI / 2,
                                            forStatus active: Bool) {
-        button.transform = CGAffineTransform(rotationAngle: CGFloat(active ? angle : -angle))
+        button.transform = CGAffineTransform(rotationAngle: CGFloat(active ? angle : 0))
     }
 }

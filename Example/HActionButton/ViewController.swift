@@ -46,6 +46,7 @@ class ViewController: UIViewController, HActionButtonDataSource, HActionButtonDe
     // MARK: - HActionButtonDelegate
     func actionButton(_ actionButton: HActionButton, didClickItemButtonAtIndex index: Int) {
         actionButton.toggle()
+        performSegue(withIdentifier: "ButtonClicked", sender: nil)
         print("button \(index) clicked")
     }
     // Optional
